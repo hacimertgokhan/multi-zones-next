@@ -5,9 +5,9 @@ import { Product } from '../../../store/cartSlice';
 import AddToCartButton from '../../../components/AddToCartButton';
 
 interface ProductDetailPageProps {
-    params: {
+    params: Promise<{
         id: string;
-    };
+    }>;
 }
 
 async function getProduct(id: string): Promise<Product | null> {
@@ -15,11 +15,11 @@ async function getProduct(id: string): Promise<Product | null> {
         const res = await fetch(`https://fakestoreapi.com/products/${id}`, {
             next: { revalidate: 3600 }
         });
-        
+
         if (!res.ok) {
             return null;
         }
-        
+
         const product = await res.json();
         return {
             ...product,
@@ -32,8 +32,9 @@ async function getProduct(id: string): Promise<Product | null> {
 }
 
 export default async function ProductDetailPage({ params }: ProductDetailPageProps) {
-    const product = await getProduct(params.id);
-    
+    const { id } = await params;
+    const product = await getProduct(id);
+
     if (!product) {
         notFound();
     }
@@ -42,8 +43,8 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         <main className="min-h-screen bg-gray-50">
             <div className="container mx-auto p-4 sm:p-6 lg:p-8">
                 <nav className="mb-8">
-                    <Link 
-                        href="/" 
+                    <Link
+                        href="/"
                         className="text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
                     >
                         ← Ürünler
