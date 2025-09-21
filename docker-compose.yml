@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  home:
+    build:
+      context: ./home
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      # home servisine cart servisinin nerede olduğunu söylüyoruz.
+      - CART_URL=http://cart:3001
+    # Development için volume mount (hot reload için)
+    volumes:
+      - ./home:/app
+      - /app/node_modules
+    networks:
+      - microfrontend-net
+
+  cart:
+    build:
+      context: ./cart
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    # Development için volume mount (hot reload için)
+    volumes:
+      - ./cart:/app
+      - /app/node_modules
+    networks:
+      - microfrontend-net
+
+networks:
+  microfrontend-net:
+    driver: bridge

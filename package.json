@@ -1,0 +1,14 @@
+{
+  "name": "micro-frontend-root",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --workspace=home & npm run dev --workspace=cart",
+    "build": "npm run build --workspace=home && npm run build --workspace=cart",
+    "test": "npm run test --workspace=home && npm run test --workspace=cart",
+    "test:coverage": "npm run test --workspace=home -- --coverage && npm run test --workspace=cart -- --coverage"
+  },
+  "workspaces": [
+    "home",
+    "cart"
+  ]
+}
